@@ -1,15 +1,15 @@
 """
 This module contains a simple performance test which
-compares the recursive version of Floyds algorithm with the
+compares the recursive version of Floyd's algorithm with the
 imperative version
 """
 
 import sys
+from time import process_time
 
 sys.path.append('../')
 from recursion.recursive_floyd import recursive_floyd_warshall, GRAPH as recursive_graph
 from iterative.iterative_floyd import iterative_floyd, GRAPH as iterative_graph
-from time import process_time
 
 
 def performance_test(function_handle, graph):
@@ -39,23 +39,29 @@ def performance_test(function_handle, graph):
     print(f"Execution Time: {elapsed_time:.6f} seconds")  # Print timings
 
 
+INITIAL_GRAPH_STATE = [
+    [0, 7, sys.maxsize, 8],
+    [sys.maxsize, 0, 5, sys.maxsize],
+    [sys.maxsize, sys.maxsize, 0, 2],
+    [sys.maxsize, sys.maxsize, sys.maxsize, 0],
+]
+
+
 def reset_graph(graph):
     """
-    Resets the global GRAPH variable for the algorithm being tested to its initial state.
-    """
-    initial_state = [
-        [0, 7, sys.maxsize, 8],
-        [sys.maxsize, 0, 5, sys.maxsize],
-        [sys.maxsize, sys.maxsize, 0, 2],
-        [sys.maxsize, sys.maxsize, sys.maxsize, 0]
-    ]
+       Resets the global GRAPH variable for the algorithm being tested to its initial state.
+       """
     for i in range(len(graph)):
         for j in range(len(graph[i])):
-            graph[i][j] = initial_state[i][j]
+            graph[i][j] = INITIAL_GRAPH_STATE[i][j]
 
 
-print("Recursion Test Time")
-performance_test(lambda: recursive_floyd_warshall(0, 0, 0), recursive_graph)
+def test_recursive_floyd():
+    recursive_floyd_warshall(0, 0, 0)
 
-print("Iterative Test Time")
-performance_test(iterative_floyd, iterative_graph)
+if __name__ == "__main__":
+    print("Recursion Test Time")
+    performance_test(test_recursive_floyd, recursive_graph)
+
+    print("Iterative Test Time")
+    performance_test(iterative_floyd, iterative_graph)
