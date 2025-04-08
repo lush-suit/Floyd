@@ -1,66 +1,66 @@
 """
-This module has a simple implementation of Floyd's Algorithm
-It contains three main functions:
-    main -> controls the execution of the script
-    print_out_graph -> prints out the graph with nodes and distances
-    recursive_floyd_warshall -> computes shortest path
+Floyd's Algorithm Implementation
 
-The global variables are:
-    NO_PATH = Marker for where there is no path. This is the max value of an integer
-    GRAPH = Contains the distances for the graph. Node names are inferred by the position
-    of the node, i.e. position  0 0 in the list is node 0
-    MAX_LENGTH = The size of the graph
-    NO_PATH_MARKER = Holder for no path possible. This is used for the printing function. 
+This module implements a simple version of Floyd's algorithm for computing the
+shortest paths in a graph. It contains these main functions:
+- main: Controls the execution of the script.
+- print_out_graph: Outputs the graph with node distances.
+- iterative_floyd: Computes the shortest path.
+
+Global variables:
+- NO_PATH: Marker for no paths (set to sys.maxsize).
+- GRAPH: Adjacency matrix containing distances between nodes.
+- MAX_LENGTH: Graph dimension.
+- NO_PATH_MARKER: Placeholder for unreachable paths in the output.
 """
-from sys import maxsize
-from itertools import product 
-NO_PATH =  maxsize
-GRAPH = [[0,   7,  NO_PATH, 8],
-[NO_PATH,  0,  5,  NO_PATH],
-[NO_PATH, NO_PATH, 0,   2],
-[NO_PATH, NO_PATH, NO_PATH, 0]]
-MAX_LENGTH = len(GRAPH[0])
-NO_PATH_MARKER = "No Path"
 
-def main():
+from itertools import product
+from sys import maxsize
+NO_PATH: int = maxsize
+GRAPH: list[list[int]] = [
+    [0, 7, NO_PATH, 8],
+    [NO_PATH, 0, 5, NO_PATH],
+    [NO_PATH, NO_PATH, 0, 2],
+    [NO_PATH, NO_PATH, NO_PATH, 0],
+]
+MAX_LENGTH: int = len(GRAPH[0])
+NO_PATH_MARKER: str = "No Path"
+
+
+def main() -> None:
     """
-    This is the calling function for the recursive floyd's algorithm
+    Execute Floyd's Algorithm using an iterative approach and display the results.
     """
     iterative_floyd()
     print_out_graph()
 
-def print_out_graph():
+
+def print_out_graph() -> None:
     """
     This function prints out the graph with the distances
-    and a place holder for no path between nodes
+    and a placeholder for no path between nodes
     """
     for start_node in range(0,MAX_LENGTH):
         for end_node in range(0,MAX_LENGTH):
             distance = GRAPH[start_node][end_node]
             if distance == NO_PATH:
-                distance = NO_PATH_MARKER 
+                distance = NO_PATH_MARKER
 
-            message = "Distance from Node %s to Node %s is %s" %\
-                (start_node,end_node,distance)
-            print (message)
+            print(f"Distance from Node {start_node} to Node {end_node} is {distance}")
 
 
-def iterative_floyd():
+def iterative_floyd() -> None:
     """
-    A simple implementation of Floyd's algorithm.
-    There is a nested loop which uses product to compute
-    the possible combinations of the loops. This is for
-    neater code 
+    Compute the shortest paths for all pairs of nodes using Floyd's algorithm.
     """
-    for intermediate, start_node,end_node\
-    in product\
-    (range(MAX_LENGTH),range(MAX_LENGTH), range(MAX_LENGTH)):
-        
+    for intermediate, start_node, end_node in product(
+    range(MAX_LENGTH),range(MAX_LENGTH), range(MAX_LENGTH)):
+
            if start_node == end_node:
                GRAPH[start_node][end_node] = 0
                continue
            
            GRAPH[start_node][end_node] = min(GRAPH[start_node][end_node],
-                                 GRAPH[start_node][intermediate] + GRAPH[intermediate][end_node] )       
+            GRAPH[start_node][intermediate] + GRAPH[intermediate][end_node] )
 if __name__ == "__main__":
     main()

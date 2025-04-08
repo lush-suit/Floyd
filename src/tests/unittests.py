@@ -19,8 +19,8 @@ class TestFloydWarshall(unittest.TestCase):
 
     def reset_graph(self, graph):
         """Helper function to reset the graph."""
-        for i in range(len(graph)):
-            for j in range(len(graph[i])):
+        for i, row in enumerate(graph):
+            for j, _ in enumerate(row):
                 graph[i][j] = self.initial_state[i][j]
 
     def test_iterative_floyd(self):
@@ -48,7 +48,6 @@ class TestFloydWarshall(unittest.TestCase):
     def test_output_format(self):
         """Test the output format of the print function."""
         from io import StringIO
-        import sys
 
         # Capture the output of the iterative version
         output = StringIO()
@@ -73,7 +72,6 @@ class TestFloydWarshall(unittest.TestCase):
 
     def test_large_graph(self):
         """Test the algorithm with a large graph."""
-        large_graph = [[0 if i == j else sys.maxsize for j in range(100)] for i in range(100)]
         self.assertIsNone(iterative_floyd())  # Ensure it runs without errors
 
     def test_consistency_between_versions(self):
